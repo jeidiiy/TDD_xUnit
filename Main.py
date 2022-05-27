@@ -1,4 +1,3 @@
-# TODO: 테스트 메서드 호출하기
 # TODO: 먼저 setUp 호출하기
 # TODO: 나중에 tearDown 호출하기
 # TODO: 테스트 메서드가 실패하더라도 tearDown 호출하기
@@ -21,8 +20,11 @@ class WasRun(TestCase):
     def testMethod(self):
         self.wasRun = 1
 
+class TestCaseTest(TestCase):
+    def testRunning(self):
+        test = WasRun("testMethod")
+        assert(not test.wasRun)
+        test.run()
+        assert(test.wasRun)
 
-test = WasRun('testMethod')
-print(test.wasRun)
-test.run()
-print(test.wasRun)
+TestCaseTest("testRunning").run()

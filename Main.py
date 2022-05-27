@@ -1,14 +1,20 @@
 # TODO: 테스트 메서드가 실패하더라도 tearDown 호출하기
 # TODO: 여러 개의 테스트 실행하기
-# TODO: 실패한 테스트 보고하기
+# TODO: setUp 에러를 잡아서 보고하기
 
 class TestResult:
     def __init__(self):
         self.runCount = 0
+        self.failureCount = 0
+
     def testStarted(self):
         self.runCount += 1
+
+    def testFailed(self):
+        self.failureCount += 1
+
     def summary(self):
-        return "%d run, 0 failed" % self.runCount
+        return "%d run, %d failed" % (self.runCount, self.failureCount) 
 
 class TestCase:
     def __init__(self, name):
@@ -21,8 +27,11 @@ class TestCase:
         result = TestResult()
         result.testStarted()
         self.setUp()
-        method = getattr(self, self.name)
-        method()
+        try:
+            method = getattr(self, self.name)
+            method()
+        except:
+            result.testFailed()
         self.tearDown()
         return result
 
@@ -45,9 +54,10 @@ class WasRun(TestCase):
         raise Exception
 
 class TestCaseTest(TestCase):
-    def testFailedResult(self):
-        test = WasRun("testBrokenMethod")
-        result = test.run()
+    def testFailedResultFormatting(self):
+        result = TestResult()
+        result.testStarted()
+        result.testFailed()
         assert("1 run, 1 failed" == result.summary())
 
     def testResult(self):
@@ -62,4 +72,4 @@ class TestCaseTest(TestCase):
 
 TestCaseTest("testTemplateMethod").run()
 TestCaseTest("testResult").run()
-TestCaseTest("testFailedResult").run()
+TestCaseTest("testFailedResultFormatting").run()

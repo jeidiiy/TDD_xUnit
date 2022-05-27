@@ -1,5 +1,6 @@
 # TODO: 테스트 메서드가 실패하더라도 tearDown 호출하기
 # TODO: 여러 개의 테스트 실행하기
+# TODO: 실패한 테스트 보고하기
 
 class TestResult:
     def __init__(self):

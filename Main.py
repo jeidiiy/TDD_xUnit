@@ -2,6 +2,10 @@
 # TODO: 여러 개의 테스트 실행하기
 # TODO: 수집된 결과를 출력하기
 
+class TestResult:
+    def summary(self):
+        return "1 run, 0 failed"
+
 class TestCase:
     def __init__(self, name):
         self.name = name
@@ -14,6 +18,7 @@ class TestCase:
         method = getattr(self, self.name)
         method()
         self.tearDown()
+        return TestResult()
 
     def tearDown(self):
         pass
@@ -31,6 +36,11 @@ class WasRun(TestCase):
         self.log = self.log + "tearDown "
 
 class TestCaseTest(TestCase):
+    def testReesult(self):
+        test = WasRun("testMethod")
+        result = test.run()
+        assert("1 run, 0 failed" == result.summary())
+
     def testTemplateMethod(self):
         self.test = WasRun("testMethod")
         self.test.run()
